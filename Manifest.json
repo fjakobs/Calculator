@@ -1,0 +1,34 @@
+{
+  "info" : 
+  {
+    "name" : "calc",
+
+    "summary" : "Calculator Demo application",
+    "description" : "This demo application is used to demonstrate some of qooxdoo's layout and styling features.",
+    
+    "homepage" : "http://qooxdoo.org/",
+
+    "license" : "EPL/LGPL",
+    "authors" : 
+    [
+      {
+        "name" : "Fabian Jakobs (fjakobs)",
+        "email" : "fabian.jakobs@1und1.de"
+      }
+    ],
+
+    "version" : "0.1",
+    "qooxdoo-versions": ["0.8", "0.8.1", "trunk"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "calc",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "application"
+  }
+}
+
