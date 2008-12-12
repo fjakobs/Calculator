@@ -25,10 +25,8 @@
 import sys, os, subprocess
 
 CMD_PYTHON = 'python'
-QOOXDOO_PATH = '../qx'
-REAL_GENERATOR = os.path.normpath(
-                    os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])),
-                                 QOOXDOO_PATH, 'tool', 'bin', 'generator.py'))
+REAL_GENERATOR = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])),
+                              os.pardir, os.pardir, 'qooxdoo', 'trunk', 'tool', 'bin', 'generator.py')
                                  
 os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))  # switch to skeleton dir
 

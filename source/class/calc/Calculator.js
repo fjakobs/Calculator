@@ -228,6 +228,7 @@ qx.Class.define("calc.Calculator",
 
         case "operation":
           control = new qx.ui.basic.Label("");
+          control.setRich(true);
           if (!this._isThemed) {
             if (!this._isThemed) {
               control.setMarginLeft(40);
@@ -373,7 +374,7 @@ qx.Class.define("calc.Calculator",
       if (this._waitForOperand || !this._pendingOperation) {
         return
       }
-      var intValue = parseInt(this._value);
+      var intValue = parseFloat(this._value);
       switch(this._pendingOperation)
       {
         case "+":
@@ -483,7 +484,7 @@ qx.Class.define("calc.Calculator",
       if (this._pendingOperation) {
         this.compute();
       } else {
-        this._computation = parseInt(this._value);
+        this._computation = parseFloat(this._value);
       }
       this._value = "0";
       this._pendingOperation = name; 
@@ -500,7 +501,7 @@ qx.Class.define("calc.Calculator",
       if (this._pendingOperation) {
         this.compute();
       } else {
-        this._computation = parseInt(this._value);
+        this._computation = parseFloat(this._value);
       }
       this._value = "0";      
     },
@@ -521,7 +522,7 @@ qx.Class.define("calc.Calculator",
      */
     _onMemoryAddPress : function() 
     {
-      this._memory += parseInt(this._value);
+      this._memory += parseFloat(this._value);
       this._showChildControl("memory");
     },
 
@@ -530,7 +531,7 @@ qx.Class.define("calc.Calculator",
      * Substracts the current value from the memory
      */
     _onMemorySubPress : function() {
-      this._memory -= parseInt(this._value);
+      this._memory -= parseFloat(this._value);
     },
 
     
