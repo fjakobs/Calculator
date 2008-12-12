@@ -4,11 +4,11 @@
     "name" : "calc",
 
     "summary" : "Calculator Demo application",
-    "description" : "This demo application is used to demonstrate some of qooxdoo's layout and styling features.",
+    "description" : "This application demonstrates some of qooxdoo's powerful layout and theming features.",
     
     "homepage" : "http://qooxdoo.org/",
 
-    "license" : "EPL/LGPL",
+    "license" : "LGPL/EPL",
     "authors" : 
     [
       {
@@ -17,7 +17,7 @@
       }
     ],
 
-    "version" : "0.1",
+    "version" : "trunk",
     "qooxdoo-versions": ["0.8.1", "trunk"]
   },
   
