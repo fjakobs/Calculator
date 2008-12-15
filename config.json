@@ -4,7 +4,7 @@
   "include" :
   [
     {
-      "path" : "../../qooxdoo/trunk/tool/data/config/application.json"
+      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
     }
   ],
 
