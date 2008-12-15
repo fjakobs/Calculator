@@ -36,6 +36,15 @@ qx.Class.define("calc.Application",
      */
     main : function()
     {
+      // Enable logging in debug variant
+      if (qx.core.Variant.isSet("qx.debug", "on"))
+      {
+        // support native logging capabilities, e.g. Firebug for Firefox
+        qx.log.appender.Native;
+        // support additional cross-browser console. Press F7 to toggle visibility
+        qx.log.appender.Console;
+      }
+  
       // Call super class
       this.base(arguments);
 
@@ -43,9 +52,10 @@ qx.Class.define("calc.Application",
       c1.moveTo(50, 70);
       c1.open();
       
-      var c = new calc.Calculator(true);
-      c.moveTo(300, 70);
-      c.open();      
+      var c2 = new calc.Calculator();
+      c2.setAppearance("black-calculator");
+      c2.moveTo(300, 70);
+      c2.open();      
     }
   }
 });

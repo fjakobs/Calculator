@@ -23,20 +23,22 @@ qx.Theme.define("calc.theme.Appearance",
 
   appearances :
   {    
-    "calculator" : 
+    "black-calculator" : 
     {
       style : function(states)
       {
         return {
-          backgroundColor : "#969696",
+          backgroundColor : "black-window-bg",
           decorator : "calc-window",
           shadow : "shadow-window",
           contentPadding : [6, 8, 8 ,8]
         }
       }
-    },
+    },    
+    "black-calculator/pane" : "widget",
+    "black-calculator/captionbar" : "widget",
     
-    "calculator/title" :
+    "black-calculator/title" :
     {
       style : function(states)
       {
@@ -44,12 +46,12 @@ qx.Theme.define("calc.theme.Appearance",
           alignY : "middle",
           textAlign : "center",
           font : "bold",
-          textColor : "#DDD"
+          textColor : "black-window-caption"
         };
       }
     },    
     
-    "calculator/icon" :
+    "black-calculator/icon" :
     {
       style : function(states)
       {
@@ -59,7 +61,7 @@ qx.Theme.define("calc.theme.Appearance",
       }
     },     
   
-    "calculator/display" :
+    "black-calculator/display" :
      {
       style : function(states)
       {
@@ -72,7 +74,7 @@ qx.Theme.define("calc.theme.Appearance",
       }
     },    
     
-    "calculator/label" :
+    "black-calculator/label" :
      {
       style : function(states)
       {
@@ -83,7 +85,7 @@ qx.Theme.define("calc.theme.Appearance",
       }
     },       
 
-    "calculator/memory" :
+    "black-calculator/memory" :
      {
       style : function(states)
       {
@@ -93,7 +95,7 @@ qx.Theme.define("calc.theme.Appearance",
       }
     },       
         
-    "calculator/operation" :
+    "black-calculator/operation" :
      {
       style : function(states)
       {
@@ -103,17 +105,73 @@ qx.Theme.define("calc.theme.Appearance",
       }
     },       
     
-    "calc-button" :
+    "black-calculator-button" :
     {
+      alias: "button",
+      
       style : function(states)
-     {
+      {
        return {
-         textColor : states.pressed ? "#aaa" : "white",
-         decorator : states.pressed ? "calc-button-pressed" : "calc-button",
+         textColor : states.pressed ? 
+           "black-button-text-pressed" :
+           "black-button-text",
+         decorator : states.pressed ?
+           "calc-button-pressed" :
+           "calc-button",
          center: true,
          padding : states.pressed ? [1, 8, 3, 8] : [2, 8]
        }
      }
-   }    
+   },
+   
+
+   /*
+   ---------------------------------------------------------------------------
+     STANDARD LOOK
+   ---------------------------------------------------------------------------
+   */      
+   
+    "calculator" : "window", 
+    "calculator-button" : "button",
+   
+    "calculator/display" :
+    {
+      style : function(states)
+      {
+        return {
+          decorator: "main",
+          height : 40,
+          padding: 3,
+          marginBottom: 3
+        }
+      }
+    },    
+   
+    "calculator/label" :
+    {
+      style : function(states)
+      {
+        return {
+          font : "bold",
+          marginLeft: 5
+        }
+      }
+    },       
+
+    "calculator/memory" : {
+      style : function(states) {
+        return {
+          marginLeft: 5
+        } 
+      }
+    },       
+       
+    "calculator/operation" : {
+      style : function(states) {
+        return {
+          marginLeft: 50
+        }
+      }
+    }
   }
 });

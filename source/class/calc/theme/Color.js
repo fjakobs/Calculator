@@ -23,5 +23,9 @@ qx.Theme.define("calc.theme.Color",
 
   colors :
   {
+    "black-window-bg": "#969696",
+    "black-window-caption": "#DDD",
+    "black-button-text": "white",
+    "black-button-text-pressed": "#AAA"
   }
 });

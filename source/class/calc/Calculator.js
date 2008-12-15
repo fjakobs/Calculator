@@ -31,14 +31,12 @@ qx.Class.define("calc.Calculator",
 {
   extend : qx.ui.window.Window,
   
-  construct : function(isThemed)
+  construct : function()
   {
     this.base(arguments, "Calculator");    
-    this._isThemed = isThemed;    
     
     // configure window
     this.set({
-      appearance: isThemed ? "calculator" : "window",
       showMinimize: false,
       showMaximize: false,
       showClose : false
@@ -84,11 +82,18 @@ qx.Class.define("calc.Calculator",
   },
   
   
+  properties : 
+  {
+    appearance :
+    {
+      refine : true,
+      init : "calculator"
+    }  
+  },
+  
+  
   members :
   {
-    /** {Boolean} Whether the new theme should be used */
-    _isThemed : false,
-    
     /** {Map} Maps button ids to the button instances */
     _buttons : null,
     
@@ -195,6 +200,19 @@ qx.Class.define("calc.Calculator",
     ---------------------------------------------------------------------------
     */    
 
+    
+    //overridden
+    _applyAppearance : function(value, old)
+    {
+      this.base(arguments, value, old);
+      
+      // forward appearance name to the buttons
+      for (var name in this._buttons) {
+        this._buttons[name].setAppearance(value + "-button");
+      }
+    },
+    
+    
     // overridden
     _createChildControlImpl : function(id)
     {
@@ -204,15 +222,6 @@ qx.Class.define("calc.Calculator",
       {
         case "display":
           var control = new qx.ui.container.Composite();
-          if (!this._isThemed) {
-            control.set({
-              decorator: "main",
-              height : 40,
-              padding: 3,
-              marginBottom: 3,
-              font: "bold"            
-            });
-          }
           control.setLayout(new qx.ui.layout.Canvas());
           
           control.add(this._getChildControl("label"), {top: 0, right: 0});
@@ -226,20 +235,12 @@ qx.Class.define("calc.Calculator",
           
         case "memory":
           control = new qx.ui.basic.Label("M");
-          if (!this._isThemed) {
-            control.setMarginLeft(20);
-          }
           control.exclude();
           break;
 
         case "operation":
           control = new qx.ui.basic.Label("");
           control.setRich(true);
-          if (!this._isThemed) {
-            if (!this._isThemed) {
-              control.setMarginLeft(40);
-            }
-          }
           break;
       }
 
@@ -271,7 +272,8 @@ qx.Class.define("calc.Calculator",
       for (var name in this._buttons)
       {
         var button = this._buttons[name];
-        button.setAppearance(this._isThemed ? "calc-button" : "button");      
+        //button.setAppearance(this._isThemed ? "calc-button" : "button");   
+        button.setAppearance(this.getAppearance() + "-button");
         container.add(button)      
       }      
       return container;
