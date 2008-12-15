@@ -101,12 +101,18 @@ qx.Class.define("calc.Calculator",
     
     /**
     * {Integer} The content of the calculator's memory as managed by the 
-    *           memory keys
+    *     memory keys
     */
     _memory : 0,
     
     /** {Integer} The current value as shown in the display */
     _value : "0",
+    
+    /** 
+     * {Integer} This is computed value after the "equals" key is pressed. The
+     *    value becomes active if the equals key is followed by an operand key.
+     */
+    _transientValue : null,
     
     /** {Integer} Accumulator for the last performed computation */
     _computation : 0,
@@ -296,6 +302,7 @@ qx.Class.define("calc.Calculator",
       this._value = "0";
       this._computation = 0;
       this._pendingOperation = null;
+      this._transientValue = null;
       this.display(this._value);
     },
     
