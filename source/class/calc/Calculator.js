@@ -22,10 +22,10 @@
  * 
  * This is an example, which demonstrates some of qooxdoo's key techniques like
  * 
- *   * Custom themes
- *   * Working with layouts
- *   * Working with events
- *   * Using sub widgets
+ * * Custom themes
+ * * Working with layouts
+ * * Working with events
+ * * Using sub widgets
  */
 qx.Class.define("calc.Calculator",
 {
