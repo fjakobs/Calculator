@@ -270,73 +270,7 @@ qx.Class.define("calc.Calculator",
       }      
       return container;
     },   
-
-
-    /*
-    ---------------------------------------------------------------------------
-      KEY EVENT HANDLING
-    ---------------------------------------------------------------------------
-    */
     
-    /**
-     * Key down event handler. Visually presses the button associated with the
-     * pressed key.
-     * 
-     * @param e {qx.event.type.KeySequence} Key event object
-     */
-    _onKeyDown : function(e)
-    {
-      var button = this._keyIdentifier[e.getKeyIdentifier()];
-      if (!button) {
-        return;
-      }
-      
-      button.press();      
-      
-      if (this._pressedButton && this._pressedButton !== button) {
-        this._pressedButton.release();
-      }      
-      this._pressedButton = button;
-      
-      e.stop();
-    },
-    
-    
-    /**
-     * Key up event handler. Visually releases the button associated with the
-     * released key.
-     * 
-     * @param e {qx.event.type.KeySequence} Key event object
-     */
-    _onKeyUp : function(e)
-    {
-      var button = this._keyIdentifier[e.getKeyIdentifier()];
-      if (!button) {
-        return;
-      }
-      
-      button.release();
-      e.stop();
-    },
-    
-    
-    /**
-     * Key press event handler. Executes the button associated with the pressed
-     * key.
-     * 
-     * @param e {qx.event.type.KeySequence} Key event object
-     */    
-    _onKeyPress : function(e)
-    {
-      var button = this._keyIdentifier[e.getKeyIdentifier()];
-      if (!button) {
-        return;
-      }
-      
-      button.execute();
-      e.stop();
-    },
-        
         
     /*
     ---------------------------------------------------------------------------
@@ -434,6 +368,7 @@ qx.Class.define("calc.Calculator",
       }
       
       this._waitForOperand = false;
+      this._transientValue = null;
       this.display(this._value);      
     },
     
@@ -453,6 +388,7 @@ qx.Class.define("calc.Calculator",
         this._value = "-" + this._value;
       }
       this._waitForOperand = false;
+      this._transientValue = null;
       this.display(this._value);      
     },
 
@@ -467,6 +403,7 @@ qx.Class.define("calc.Calculator",
         this._value += ".";
       }
       this._waitForOperand = false;
+      this._transientValue = null;
       this.display(this._value);      
     },
 
@@ -483,6 +420,8 @@ qx.Class.define("calc.Calculator",
 
       if (this._pendingOperation) {
         this.compute();
+      } else if (this._transientValue !== null) {
+        this._computation = this._transientValue;
       } else {
         this._computation = parseFloat(this._value);
       }
@@ -502,8 +441,9 @@ qx.Class.define("calc.Calculator",
         this.compute();
       } else {
         this._computation = parseFloat(this._value);
-      }
-      this._value = "0";      
+      } 
+      this._transientValue = this._computation;
+      this._value = "0";     
     },
     
       
@@ -542,7 +482,74 @@ qx.Class.define("calc.Calculator",
     {
       this._value = this._memory;
       this._waitForOperand = false;
+      this._transientValue = null;
       this.display(this._value);
-    }
+    },
+    
+    
+    /*
+    ---------------------------------------------------------------------------
+      KEY EVENT HANDLING
+    ---------------------------------------------------------------------------
+    */
+    
+    /**
+     * Key down event handler. Visually presses the button associated with the
+     * pressed key.
+     * 
+     * @param e {qx.event.type.KeySequence} Key event object
+     */
+    _onKeyDown : function(e)
+    {
+      var button = this._keyIdentifier[e.getKeyIdentifier()];
+      if (!button) {
+        return;
+      }
+      
+      button.press();      
+      
+      if (this._pressedButton && this._pressedButton !== button) {
+        this._pressedButton.release();
+      }      
+      this._pressedButton = button;
+      
+      e.stop();
+    },
+    
+    
+    /**
+     * Key up event handler. Visually releases the button associated with the
+     * released key.
+     * 
+     * @param e {qx.event.type.KeySequence} Key event object
+     */
+    _onKeyUp : function(e)
+    {
+      var button = this._keyIdentifier[e.getKeyIdentifier()];
+      if (!button) {
+        return;
+      }
+      
+      button.release();
+      e.stop();
+    },
+    
+    
+    /**
+     * Key press event handler. Executes the button associated with the pressed
+     * key.
+     * 
+     * @param e {qx.event.type.KeySequence} Key event object
+     */    
+    _onKeyPress : function(e)
+    {
+      var button = this._keyIdentifier[e.getKeyIdentifier()];
+      if (!button) {
+        return;
+      }
+      
+      button.execute();
+      e.stop();
+    }    
   }
 });
