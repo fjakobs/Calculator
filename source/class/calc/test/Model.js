@@ -1,3 +1,22 @@
+/* ************************************************************************
+
+   qooxdoo - the new era of web development
+
+   http://qooxdoo.org
+
+   Copyright:
+     2007-2008 1&1 Internet AG, Germany, http://www.1und1.de
+
+   License:
+     LGPL: http://www.gnu.org/licenses/lgpl.html
+     EPL: http://www.eclipse.org/org/documents/epl-v10.php
+     See the LICENSE file in the project's top-level directory for details.
+
+   Authors:
+     * Fabian Jakobs (fjakobs)
+
+************************************************************************ */
+
 qx.Class.define("calc.test.Model",
 {
   extend : qx.dev.unit.TestCase,
@@ -163,6 +182,82 @@ qx.Class.define("calc.test.Model",
 
       this.readTokens("=", "=");
       this.assertEquals(4, this.model.getValue());
+    },
+    
+    
+    testMemorySubstract : function()
+    {
+      this.readTokens("1", "M-");
+      this.assertEquals(-1, this.model.getMemory());
+      
+      this.readTokens("C", "2", "M-");
+      this.assertEquals(-3, this.model.getMemory());
+    },
+    
+    
+    testMemoryAdd : function()
+    {
+      this.readTokens("1", "M+");
+      this.assertEquals(1, this.model.getMemory());
+      
+      this.readTokens("C", "2", "M+");
+      this.assertEquals(3, this.model.getMemory());
+    },
+    
+    
+    testMemoryAddNumberState : function()
+    {
+      this.readTokens("1", "M+");
+      this.assertEquals(1, this.model.getMemory());
+    },
+    
+    
+    testMemoryAddWaitState : function()
+    {
+      this.readTokens("1", "+", "2", "=", "M+");
+      this.assertEquals(3, this.model.getMemory());
+    },
+    
+    
+    testMemoryAddErrorState : function()
+    {
+      this.readTokens("1", "/", "0", "=", "M+");
+      this.assertEquals(null, this.model.getMemory());
+    },
+    
+    
+    testMemoryRestoreNumberState : function()
+    {
+      this.readTokens("1", "M+", "2", "MR");
+      this.assertEquals("1", this.model.getInput());
+      this.assertEquals("number", this.model.getState());
+    },
+
+    
+    testMemoryRestoreWaitState : function()
+    {
+      this.readTokens("1", "M+", "+", "2", "=", "MR");
+      this.assertEquals("1", this.model.getInput());
+    },
+    
+    
+    testRestoreNull : function()
+    {
+      this.readTokens("2", "MR");
+      this.assertEquals("2", this.model.getInput());
+      this.assertEquals(null, this.model.getMemory());      
+    },
+    
+    
+    testMemoryClear : function()
+    {
+      this.assertEquals(null, this.model.getMemory());            
+      
+      this.readTokens("MC");
+      this.assertEquals(null, this.model.getMemory());            
+
+      this.readTokens("1", "M+", "MC");
+      this.assertEquals(null, this.model.getMemory());            
     }
   }
 });

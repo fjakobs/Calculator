@@ -79,6 +79,11 @@ qx.Class.define("calc.Presenter",
       var view = this.getView();
       
       model.bind("operator", view, "operation");
+      model.bind("memory", view, "memory", {
+        converter : function(memory) {
+          return memory === null ? false : true;
+        }
+      });
       
       model.addListener("changeState", this._updateDisplay, this);
       model.addListener("changeInput", this._updateDisplay, this);

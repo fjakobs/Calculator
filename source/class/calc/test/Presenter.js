@@ -1,3 +1,22 @@
+/* ************************************************************************
+
+   qooxdoo - the new era of web development
+
+   http://qooxdoo.org
+
+   Copyright:
+     2007-2008 1&1 Internet AG, Germany, http://www.1und1.de
+
+   License:
+     LGPL: http://www.gnu.org/licenses/lgpl.html
+     EPL: http://www.eclipse.org/org/documents/epl-v10.php
+     See the LICENSE file in the project's top-level directory for details.
+
+   Authors:
+     * Fabian Jakobs (fjakobs)
+
+************************************************************************ */
+
 qx.Class.define("calc.test.Presenter",
 {
   extend : qx.dev.unit.TestCase,
@@ -28,6 +47,7 @@ qx.Class.define("calc.test.Presenter",
       this.assertEquals("", this.view.getOperation());
     },
     
+    
     testNumberState : function()
     {
       this.model.set({
@@ -38,15 +58,17 @@ qx.Class.define("calc.test.Presenter",
       this.assertEquals("123", this.view.getDisplay());
     },
     
+    
     testWaitForNumberState : function()
     {
       this.model.set({
         value : 456,
-        state : "waitForNumber",
+        state : "waitForNumber"
       });
       
       this.assertEquals("456", this.view.getDisplay());
     },
+    
     
     testErrorState : function()
     {
@@ -57,6 +79,26 @@ qx.Class.define("calc.test.Presenter",
       
       this.assertEquals("Doofer Fehler", this.view.getDisplay());
     },
+    
+    
+    testMemory : function()
+    {
+      this.model.set({
+        memory : null
+      });
+      
+      this.assertEquals(false, this.view.getMemory());      
+
+      this.model.setMemory(0);
+      this.assertEquals(true, this.view.getMemory());      
+
+      this.model.setMemory(12);
+      this.assertEquals(true, this.view.getMemory());      
+
+      this.model.setMemory(null);
+      this.assertEquals(false, this.view.getMemory());      
+    },
+    
     
     testChangeState : function()
     {
@@ -78,6 +120,7 @@ qx.Class.define("calc.test.Presenter",
       this.model.setState("number");      
       this.assertEquals("123", this.view.getDisplay());      
     },
+    
     
     testButtonPress : function()
     {

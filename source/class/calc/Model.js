@@ -71,6 +71,13 @@ qx.Class.define("calc.Model",
       check : "Number",
       nullable : true,
       event : "changeValue"
+    },
+    
+    memory :
+    {
+      check : "Number",
+      nullable : true,
+      event : "changeMemory"
     }
   },
   
@@ -80,15 +87,7 @@ qx.Class.define("calc.Model",
     {
       if (token.match(/^[0123456789]$/)) {
         this.__readDigit(token);
-      } else if (token == "M+") {
-        this._onMemoryAddPress();
-      } else if (token == "M-") {
-        this._onMemorySubPress();
-      } else if (token == "MC") {
-        this._onMemoryClearPress();
-      } else if (token == "MR") {
-        this._onMemoryGetPress();
-      } else if (token.match(/[\+\-\*\/]/)) {
+      } else if (token.match(/^[\+\-\*\/]$/)) {
         this.__readBinaryOperator(token);
       } else if (token == "sign") {
         this.__readSign();
@@ -98,7 +97,20 @@ qx.Class.define("calc.Model",
         this.__readEquals();
       } else if (token == "C") {
         this.__readClear();
+      } else if (token == "M+") {
+        this.__readMemory(token);
+      } else if (token == "M-") {
+        this.__readMemory(token);
+      } else if (token == "MC") {
+        this.__readMemoryClear();
+      } else if (token == "MR") {
+        this.__readMemoryRestore();
       }     
+    },
+    
+    
+    __getInputAsNumber : function() {
+      return parseFloat(this.getInput());
     },
     
     
@@ -202,7 +214,7 @@ qx.Class.define("calc.Model",
       }     
       this.setState("waitForNumber");
       
-      var operant = parseFloat(this.getInput());     
+      var operant = this.__getInputAsNumber();     
       var value = this.getValue();
       
       if (value !== null) {
@@ -232,7 +244,7 @@ qx.Class.define("calc.Model",
       
       this.setState("waitForNumber");
       
-      var operant = parseFloat(this.getInput());
+      var operant = this.__getInputAsNumber();
       this.setOperant(operant);  
       
       this.setValue(this.__compute(value, operant, operator));
@@ -244,6 +256,45 @@ qx.Class.define("calc.Model",
       this.setState("number");
       this.setOperator(null);
       this.setValue(null);
+      this.setInput("0");
+    },
+    
+    
+    __readMemory : function(token)
+    {
+      var state = this.getState();
+      var value;
+      
+      if (state == "error") {
+        return
+      } else if (state == "waitForNumber") {
+        value = this.getValue();
+      } else {
+        value = this.__getInputAsNumber();
+      }
+      
+      var memory = this.getMemory() || 0;
+      if (token == "M+") {
+        this.setMemory(memory + value);
+      } else {
+        this.setMemory(memory - value);
+      }
+    },
+    
+    
+    __readMemoryRestore : function()
+    {
+      var memory = this.getMemory();
+      if (memory == null) {
+        return;
+      }
+      this.setState("number");
+      this.setInput(memory.toString());
+    },
+    
+    
+    __readMemoryClear: function() {
+      this.setMemory(null);
     }
   } 
 });
