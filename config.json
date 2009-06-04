@@ -11,7 +11,7 @@
   "let" :
   {
     "APPLICATION"  : "calc",
-    "QOOXDOO_PATH" : "../../qooxdoo/qooxdoo-0.8.1-sdk",
+    "QOOXDOO_PATH" : "qooxdoo",
     "QXTHEME"      : "calc.theme.Theme",
     "API_EXCLUDE"  : ["qx.legacy.*","qx.test.*"],
     "LOCALES"      : [ "en" ],

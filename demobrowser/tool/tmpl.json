@@ -1,0 +1,101 @@
+    "common-XXX" :
+    {
+      "library" :
+      [
+        {
+          "manifest" : "../../org.qooxdoo.sdk/qooxdoo/framework/Manifest.json"
+        },
+        {
+          "manifest" : "Manifest.demo.json"
+        },
+        {
+          "manifest" : "../Manifest.json"
+        }  
+      ],
+
+      "include" :
+      [
+        "YYY",
+        "qx.log.appender.Native",
+        "qx.log.appender.Console",
+        "qx.dev.ObjectSummary",
+        "qx.dev.Pollution",
+        "calc.theme.*"
+      ],
+
+      "asset-let" :
+      {
+        "qx.icontheme" : ["Oxygen", "Tango"],
+        "qx.theme"     : ["Classic", "Modern"]
+      },
+
+      "cache" :
+      {
+        "compile" : "../cache"
+      },
+
+      "settings" :
+      {
+        "qx.application" : "YYY",
+        "qx.allowUrlVariants": true,
+        "qx.allowUrlSettings" : true
+      }
+    },
+
+
+    "source-XXX" :
+    {
+      "extend" : ["common-XXX"],
+
+      "let"    : {"THEME" : "calc.theme.Theme"},
+
+      "settings" : {"qx.theme": "${THEME}"},
+      
+      "variants" :
+      {
+        "qx.debug" : ["on"],
+        "qx.aspects" : ["off"],
+        "qx.compatibility" : ["off"],
+        "qx.deprecationWarnings" : ["on"]
+      },
+      
+      "compile-source" :
+      {
+        "file" : "source/script/YYY.js",
+        "root" : "source/demo/yyy"
+      }
+    },
+
+
+    "build-XXX" :
+    {
+      "extend" : ["common-XXX"],
+
+      "let"    : {"THEME" : "calc.theme.Theme"},
+
+      "settings" : {"qx.theme": "${THEME}"},
+
+      "variants" :
+      {
+        "qx.debug" : ["off"],
+        "qx.aspects" : ["off"]
+      },
+
+      "compile-dist" :
+      {
+        "paths" :
+        {
+          "file" : "build/script/YYY.js"
+        },
+        "uris" :
+        {
+          "script"  : "../../script",
+          "resource" : "../../resource"
+        },
+        "code" :
+        {
+          "format"  : true,
+          "optimize" : [ "variables", "basecalls", "privates", "strings" ]
+        }
+      }
+    }

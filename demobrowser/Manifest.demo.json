@@ -1,0 +1,29 @@
+{
+  "info" : 
+  {
+    "name" : "DemoBrowser Demos",
+
+    "summary" : "Small sample applications that run in the DemoBrowser on stand-alone",
+    "description" : "Small sample applications that run in the DemoBrowser on stand-alone",
+    
+    "keywords" : ["demo"],
+    "homepage" : "http://www.unitedinternet.com",
+
+    "license" : "Commercial",
+    "authors" : [],
+    
+    "version" : "trunk",
+    "qooxdoo-versions": ["trunk", "0.8.2"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "demobrowser.demo",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "application"
+  }
+}
+

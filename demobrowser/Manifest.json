@@ -1,0 +1,29 @@
+{
+  "info" : 
+  {
+    "name" : "DemoBrowser",
+
+    "summary" : "A GUI framework application for qui demos",
+    "description" : "The DemoBrowser provides a run environment for qui samples and demo apps.",
+    
+    "keywords" : ["demos", "run frame"],
+    "homepage" : "http://www.unitedinternet.de",
+
+    "license" : "Commercial",
+    "authors" : [],
+
+    "version" : "trunk",
+    "qooxdoo-versions": ["trunk", "0.8.2"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "demobrowser",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "application"
+  }
+}
+
