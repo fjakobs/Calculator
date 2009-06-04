@@ -48,14 +48,11 @@ qx.Class.define("calc.Application",
       // Call super class
       this.base(arguments);
 
-      var c1 = new calc.Calculator();
-      c1.moveTo(50, 70);
-      c1.open();
-      
-      var c2 = new calc.Calculator();
-      c2.setAppearance("black-calculator");
-      c2.moveTo(300, 70);
-      c2.open();      
+      var view = new calc.view.Calculator();
+      view.moveTo(50, 70);
+      view.open();      
+   
+      var presenter = new calc.Presenter(view);
     }
   }
 });

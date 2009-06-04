@@ -48,7 +48,6 @@
     "APPLICATION"  : "demobrowser",
     "API_EXCLUDE"  : ["${APPLICATION}.demo.*"],
     "TEST_INCLUDE"   : "${APPLICATION}.*",
-    "CACHE"        : "../cache",
     "QOOXDOO_PATH" : "../../org.qooxdoo.sdk/qooxdoo",
     "THEME"        : "demobrowser.Theme",
     "PYTHON"       : "python"
@@ -92,11 +91,6 @@
       {
         "qx.icontheme" : ["Tango", "Oxygen"],
         "qx.theme"     : ["Modern"]
-      },
-
-      "cache" :
-      {
-        "compile" : "${CACHE}"
       }
     },
 

@@ -22,7 +22,7 @@
  * 
  * This class stores all information needed for a calculator button
  */
-qx.Class.define("calc.Button", 
+qx.Class.define("calc.view.Button", 
 {
   extend : qx.ui.form.Button,
 
@@ -56,6 +56,15 @@ qx.Class.define("calc.Button",
     });
     
     this._keyIdentifier = keyIdentifier || null;
+  },
+  
+  properties :
+  {
+    appearance :
+    {
+      refine : true,
+      init : "calculator-button"
+    }
   },
 
   members :

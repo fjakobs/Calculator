@@ -21,6 +21,12 @@ qx.Class.define("calc.view.Display",
       init : "display"
     },
     
+    display : 
+    {
+      init : "0",
+      apply : "_applyDisplay"
+    },
+    
     memory :
     {
       check : "Boolean",
@@ -38,11 +44,6 @@ qx.Class.define("calc.view.Display",
   
   members : 
   {
-    display : function(value) {
-      this.getChildControl("label").setValue(value.toString());
-    },
-    
-    
     // overridden
     _createChildControlImpl : function(id)
     {
@@ -51,7 +52,7 @@ qx.Class.define("calc.view.Display",
       switch(id)
       {
         case "label":
-          control = new qx.ui.basic.Label("0");
+          control = new qx.ui.basic.Label(this.getDisplay());
           break;
           
         case "memory":
@@ -60,12 +61,17 @@ qx.Class.define("calc.view.Display",
           break;
 
         case "operation":
-          control = new qx.ui.basic.Label("");
+          control = new qx.ui.basic.Label(this.getOperation());
           control.setRich(true);
           break;
       }
 
       return control || this.base(arguments, id);
+    },
+    
+    
+    _applyDisplay : function(value, old) {
+      this.getChildControl("label").setValue(value.toString());
     },
     
     

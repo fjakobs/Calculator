@@ -1,4 +1,4 @@
-qx.Class.define("demobrowser.demo.calc.Display",
+qx.Class.define("demobrowser.demo.calc.Calculator",
 {
   extend : demobrowser.demo.DemoTestRunner,
 
@@ -7,7 +7,7 @@ qx.Class.define("demobrowser.demo.calc.Display",
     main : function()
     {
       this.base(arguments);
-      this.initializeTestClass(calc.test.view.Display);
+      this.initializeTestClass(calc.test.view.Calculator);
     }
   }
 });

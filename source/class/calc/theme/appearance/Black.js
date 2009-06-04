@@ -103,7 +103,7 @@ qx.Theme.define("calc.theme.appearance.Black",
       }
     }, 
     
-    "calculator/display" : "black-display",
+    "calculator/display" : "display",
     
     "calculator-button" :
     {
