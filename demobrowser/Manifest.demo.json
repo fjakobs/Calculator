@@ -3,13 +3,13 @@
   {
     "name" : "DemoBrowser Demos",
 
-    "summary" : "Small sample applications that run in the DemoBrowser on stand-alone",
-    "description" : "Small sample applications that run in the DemoBrowser on stand-alone",
+    "summary" : "Calculator demo browser",
+    "description" : "Calculator test applications.",
     
     "keywords" : ["demo"],
-    "homepage" : "http://www.unitedinternet.com",
+    "homepage" : "http://qooxdoo.com",
 
-    "license" : "Commercial",
+    "license" : "LGPL/EPL",
     "authors" : [],
     
     "version" : "trunk",

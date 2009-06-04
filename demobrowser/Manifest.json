@@ -3,13 +3,13 @@
   {
     "name" : "DemoBrowser",
 
-    "summary" : "A GUI framework application for qui demos",
-    "description" : "The DemoBrowser provides a run environment for qui samples and demo apps.",
+    "summary" : "Calculator demo browser",
+    "description" : "Calculator test applications.",
     
     "keywords" : ["demos", "run frame"],
-    "homepage" : "http://www.unitedinternet.de",
+    "homepage" : "http://www.qooxdoo.org",
 
-    "license" : "Commercial",
+    "license" : "LGPL/EPL",
     "authors" : [],
 
     "version" : "trunk",
