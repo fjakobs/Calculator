@@ -52,7 +52,8 @@ qx.Class.define("calc.Application",
       view.moveTo(50, 70);
       view.open();      
    
-      var presenter = new calc.Presenter(view);
+      var model = new calc.Model();
+      var presenter = new calc.Presenter(view, model);
     }
   }
 });

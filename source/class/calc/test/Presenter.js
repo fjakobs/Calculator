@@ -4,106 +4,85 @@ qx.Class.define("calc.test.Presenter",
   
   members :
   {
-  
     setUp : function() 
     {
       this.view = new calc.test.ViewMock();
-      this.presenter = new calc.Presenter(this.view);
-    },
-    
-    testSetDisplay : function()
-    {
-      this.presenter.display("123");
-      this.assertEquals("123", this.view.getDisplay());
-    },
-    
-    testInputDigits : function()
-    {
-      this.view.pressButtons("1", "2", "3");
-      this.assertEquals("123", this.view.getDisplay());
-    },
-    
-    testInputZeros : function()
-    {
-      this.view.pressButtons("0");
-      this.assertEquals("0", this.view.getDisplay());
-
-      this.view.pressButtons("0", "0", "1", "0");
-      this.assertEquals("10", this.view.getDisplay());
+      this.model = new calc.test.ModelMock();
+      this.presenter = new calc.Presenter(this.view, this.model);
     },
     
     
-    testInputSign : function()
+    testOperator : function()
     {
-      this.view.pressButtons("sign");
-      this.assertEquals("0", this.view.getDisplay());
+      this.model.set({
+        state : "number",
+        operator : null
+      });
       
-      this.view.pressButtons("1", "sign");
-      this.assertEquals("-1", this.view.getDisplay());
-      
-      this.view.pressButtons("sign", "0");
-      this.assertEquals("10", this.view.getDisplay());
-    },
-    
-    
-    testInputDot : function()
-    {
-      this.view.pressButtons(".");
-      this.assertEquals("0.", this.view.getDisplay());
-      
-      this.view.pressButtons(".", ".", ".");
-      this.assertEquals("0.", this.view.getDisplay());
-      
-      this.view.pressButtons("1", ".", ".", ".", "2");
-      this.assertEquals("0.12", this.view.getDisplay());      
-    },
-    
-    
-    testBinaryOperation : function()
-    {
-      this.view.pressButtons("+");
-      this.assertEquals("+", this.view.getOperation());
-
-      this.view.pressButtons("*");
-      this.assertEquals("*", this.view.getOperation());
-      
-      this.view.pressButtons("/");
-      this.assertEquals("/", this.view.getOperation());
-      
-      this.view.pressButtons("-");
-      this.assertEquals("-", this.view.getOperation());
-    },
-    
-    
-    testEqualPress : function()
-    {
-      this.view.pressButtons("1", "+", "2", "=");
       this.assertEquals("", this.view.getOperation());
-      this.assertEquals("3", this.view.getDisplay());
+
+      this.model.setOperator("*");
+      this.assertEquals("*", this.view.getOperation());
+
+      this.model.setOperator(null);
+      this.assertEquals("", this.view.getOperation());
     },
-
     
-    testMemory : function()
+    testNumberState : function()
     {
-      this.view.pressButtons("1", "M+");
-      this.assertEquals(1, this.presenter.getMemory());
-      this.assertEquals(true, this.view.getMemory());
+      this.model.set({
+        state : "number",
+        input : "123"
+      });
+      
+      this.assertEquals("123", this.view.getDisplay());
+    },
+    
+    testWaitForNumberState : function()
+    {
+      this.model.set({
+        value : 456,
+        state : "waitForNumber",
+      });
+      
+      this.assertEquals("456", this.view.getDisplay());
+    },
+    
+    testErrorState : function()
+    {
+      this.model.set({
+        state : "error",
+        errorMessage : "Doofer Fehler"
+      });
+      
+      this.assertEquals("Doofer Fehler", this.view.getDisplay());
+    },
+    
+    testChangeState : function()
+    {
+      this.model.set({
+        state : "number",
+        input : "123",
+        value : 456,
+        errorMessage : "doofer Fehler"
+      });
+      
+      this.assertEquals("123", this.view.getDisplay());
+      
+      this.model.setState("waitForNumber");      
+      this.assertEquals("456", this.view.getDisplay());      
 
-      this.view.pressButtons("5", "M+");
-      this.assertEquals(6, this.presenter.getMemory());
-      this.assertEquals(true, this.view.getMemory());
+      this.model.setState("error");      
+      this.assertEquals("doofer Fehler", this.view.getDisplay());      
       
-      this.view.pressButtons("3", "M-");
-      this.assertEquals(3, this.presenter.getMemory());
-      this.assertEquals(true, this.view.getMemory());
-      
-      this.view.pressButtons("MR");
-      this.assertEquals("3", this.view.getDisplay());
-      this.assertEquals(true, this.view.getMemory());
-      
-      this.view.pressButtons("MC");
-      this.assertEquals(null, this.presenter.getMemory());
-      this.assertEquals(false, this.view.getMemory());
+      this.model.setState("number");      
+      this.assertEquals("123", this.view.getDisplay());      
+    },
+    
+    testButtonPress : function()
+    {
+      this.view.pressButtons("1");
+      this.assertEquals("1", this.model.tokens[0]);
     }
   }
-})
+});

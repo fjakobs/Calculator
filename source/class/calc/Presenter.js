@@ -2,11 +2,11 @@ qx.Class.define("calc.Presenter",
 {
   extend : qx.core.Object,
 
-  construct : function(view) 
+  construct : function(view, model) 
   {
     this.base(arguments);
     this.setView(view);
-    this.clear();
+    this.setModel(model);
   },
   
   properties :
@@ -14,268 +14,81 @@ qx.Class.define("calc.Presenter",
     view :
     {
       check : "calc.view.ICalculator",
-      apply : "_applyView"
+      apply : "_applyViewModel"
     },
     
-    memory :
+    model :
     {
-      check : "Number",
-      nullable : true,
-      event : "changeMemory"
-    },
-    
-    pendingOperation :
-    {
-      check : "String",
-      init : "",
-      event : "changePendingOperation"
+      apply : "_applyViewModel",
+      init : null
     }
   },
   
   members :
   {
-    _applyView : function(value, old)
+    _applyViewModel : function(value, old)
     {
       if (old) {
-        throw new Error("The view cannot be changed!");
+        throw new Error("The view and model cannot be changed!");
       }
       
-      value.addListener("buttonPress", this._onButtonPress, this);
+      var model = this.getModel();
+      var view = this.getView();
       
-      this.bind("memory", value, "memory", {
-        converter : function(data) {
-          return data !== null; 
-        }
-      });
-      
-      this.bind("pendingOperation", value, "operation");      
-    },
-    
-    
-   /**
-    * Show the given text in the display
-    * 
-    * @param text {String} The text to display
-    */    
-    display : function(text) {
-      this.getView().setDisplay(text);
-    },
-    
-    
-    /**
-     * Reset the calculator
-     */
-    clear : function()
-    {
-      this._value = "0";
-      this._computation = 0;
-      this.resetPendingOperation();
-      this._transientValue = null;
-      this.display(this._value);
-    },    
-    
-    
-    /**
-     * Perform the pending operation
-     */
-    compute : function()
-    {    
-      if (this._waitForOperand || !this.getPendingOperation()) {
-        return
-      }
-      var intValue = parseFloat(this._value);
-      switch(this.getPendingOperation())
-      {
-        case "+":
-          this._computation += intValue;
-          break;
-
-        case "-":
-          this._computation -= intValue;
-          break;
-
-        case "*":
-          this._computation *= intValue;
-          break;
-
-        case "/":
-          if (intValue == 0)
-          {
-            this.clear();
-            this.display("Division by zero!");
-            return;
-          } else {
-            this._computation /= intValue;
-          }
-          break;
-      }
-     
-      this._value = "0";
-      this.resetPendingOperation();  
-     
-      this._waitForOperand = false;
-      this.display(this._computation.toString());
-    },
-    
-    
-    _onButtonPress : function(e)
-    {
-      var key = e.getData();
-      
-      if (key.match(/[0123456789]/)) {
-        this._onDigitPress(key);
-      } else if (key == "M+") {
-        this._onMemoryAddPress();
-      } else if (key == "M-") {
-        this._onMemorySubPress();
-      } else if (key == "MC") {
-        this._onMemoryClearPress();
-      } else if (key == "MR") {
-        this._onMemoryGetPress();
-      } else if (key.match(/[\+\-\*\/]/)) {
-        this._onBinaryOperandPress(key);
-      } else if (key == "sign") {
-        this._onSignPress();
-      } else if (key == ".") {
-        this._onDotPress();
-      } else if (key == "=") {
-        this._onEqualsPress();
-      }
-    },
-    
-    
-    /**
-     * Handles the execution of the digit buttons
-     */
-    _onDigitPress : function(digit)
-    {
-      if (digit == "0") 
-      {
-        if (this._value !== "0") {
-          this._value += "0";            
-        }        
-      }
-      else
-      {
-        if (this._value == "0") {
-          this._value = digit;
-        } else {
-          this._value += digit;          
-        }        
-      }
-      
-      this._waitForOperand = false;
-      this._transientValue = null;
-      this.display(this._value);      
-    },
-    
-    
-    /**
-     * Handles the press of the plus/minus sign
-     */
-    _onSignPress : function()
-    {
-      if (this._value == "0") {
+      if (!model || !view) {
         return;
       }
-      var isNegative = this._value.charAt(0) == "-";
-      if (isNegative) {
-        this._value = this._value.substr(1);
-      } else {
-        this._value = "-" + this._value;
+      
+      this.__bindView();
+      this.__bindModel();
+    },
+    
+    
+    __bindView : function() {
+      this.getView().addListener("buttonPress", this._onButtonPress, this);
+    },
+    
+    
+    _onButtonPress : function(e) {
+      this.getModel().readToken(e.getData());
+    },
+    
+    
+    __bindModel : function() 
+    {
+      var model = this.getModel();
+      var view = this.getView();
+      
+      model.bind("operator", view, "operation");
+      
+      model.addListener("changeState", this._updateDisplay, this);
+      model.addListener("changeInput", this._updateDisplay, this);
+      model.addListener("changeValue", this._updateDisplay, this);
+      model.addListener("changeErrorMessage", this._updateDisplay, this);
+    },
+    
+    
+    _updateDisplay : function(e)
+    {
+      var displayValue;
+      var model = this.getModel();
+      
+      switch(this.getModel().getState())
+      {
+        case "number":
+          displayValue = model.getInput();
+          break;
+        
+        case "waitForNumber":
+          displayValue = model.getValue() + "";
+          break;
+          
+        case "error":
+          displayValue = model.getErrorMessage();
+          break;
       }
-      this._waitForOperand = false;
-      this._transientValue = null;
-      this.display(this._value);      
-    },
-    
-    
-    /**
-    * Handles the press of the decimal separator
-    */
-   _onDotPress : function() 
-    {
-      var isFraction = this._value.indexOf(".") !== -1;
-      if (!isFraction) {
-        this._value += ".";
-      }
-      this._waitForOperand = false;
-      this._transientValue = null;
-      this.display(this._value);      
-    },
-    
-    
-    /**
-     * Handles the press of any of the binary operators
-     */
-    _onBinaryOperandPress : function(operator)
-    {
-      if (this.getPendingOperation()) {
-        this.compute();
-      } else if (this._transientValue !== null) {
-        this._computation = this._transientValue;
-      } else {
-        this._computation = parseFloat(this._value);
-      }
-      this._value = "0";
-      this.setPendingOperation(operator); 
-      this._waitForOperand = true;      
-    },
-    
-    
-    /**
-     * Handles the press of the equals sign
-     */    
-    _onEqualsPress : function()
-    {
-      if (this.getPendingOperation()) {
-        this.compute();
-      } else {
-        this._computation = parseFloat(this._value);
-      } 
-      this._transientValue = this._computation;
-      this._value = "0";     
-    },    
-    
-    
-    /**
-     * Clears the memory
-     */      
-    _onMemoryClearPress : function() {
-      this.setMemory(null);
-    },
-    
-    
-    /**
-     * Adds the current value to the memory
-     */
-    _onMemoryAddPress : function() 
-    {
-      this.setMemory((this.getMemory() || 0) + parseFloat(this._value));
-      this._value = "0";
-      this._waitForOperand = true; 
-    },
-    
-    
-    /**
-     * Substracts the current value from the memory
-     */
-    _onMemorySubPress : function() 
-    {
-      this.setMemory((this.getMemory() || 0) - parseFloat(this._value));
-      this._value = "0";
-      this._waitForOperand = true; 
-    },
-
-   
-    /**
-     * Replaces the current value with the memory
-     */
-    _onMemoryGetPress : function()
-    {
-      this._value = this.getMemory();
-      this._waitForOperand = false;
-      this._transientValue = null;
-    }    
+      
+      this.getView().setDisplay(displayValue || "");
+    }
   } 
 });

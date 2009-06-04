@@ -19,6 +19,8 @@ qx.Class.define("calc.test.view.Display",
     
     setUp : function()
     {
+      this.base(arguments);
+      
       this.display = new calc.view.Display();
       this._add(this.display);
     },
