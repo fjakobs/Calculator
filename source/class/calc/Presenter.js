@@ -22,6 +22,13 @@ qx.Class.define("calc.Presenter",
       check : "Number",
       nullable : true,
       event : "changeMemory"
+    },
+    
+    pendingOperation :
+    {
+      check : "String",
+      init : "",
+      event : "changePendingOperation"
     }
   },
   
@@ -40,6 +47,8 @@ qx.Class.define("calc.Presenter",
           return data !== null; 
         }
       });
+      
+      this.bind("pendingOperation", value, "operation");      
     },
     
     
@@ -60,7 +69,7 @@ qx.Class.define("calc.Presenter",
     {
       this._value = "0";
       this._computation = 0;
-      this._pendingOperation = null;
+      this.resetPendingOperation();
       this._transientValue = null;
       this.display(this._value);
     },    
@@ -71,11 +80,11 @@ qx.Class.define("calc.Presenter",
      */
     compute : function()
     {    
-      if (this._waitForOperand || !this._pendingOperation) {
+      if (this._waitForOperand || !this.getPendingOperation()) {
         return
       }
       var intValue = parseFloat(this._value);
-      switch(this._pendingOperation)
+      switch(this.getPendingOperation())
       {
         case "+":
           this._computation += intValue;
@@ -102,8 +111,7 @@ qx.Class.define("calc.Presenter",
       }
      
       this._value = "0";
-      this._pendingOperation = null;  
-      this.getView().setOperation("");
+      this.resetPendingOperation();  
      
       this._waitForOperand = false;
       this.display(this._computation.toString());
@@ -202,7 +210,7 @@ qx.Class.define("calc.Presenter",
      */
     _onBinaryOperandPress : function(operator)
     {
-      if (this._pendingOperation) {
+      if (this.getPendingOperation()) {
         this.compute();
       } else if (this._transientValue !== null) {
         this._computation = this._transientValue;
@@ -210,8 +218,7 @@ qx.Class.define("calc.Presenter",
         this._computation = parseFloat(this._value);
       }
       this._value = "0";
-      this._pendingOperation = operator; 
-      this.getView().setOperation(operator);
+      this.setPendingOperation(operator); 
       this._waitForOperand = true;      
     },
     
@@ -221,7 +228,7 @@ qx.Class.define("calc.Presenter",
      */    
     _onEqualsPress : function()
     {
-      if (this._pendingOperation) {
+      if (this.getPendingOperation()) {
         this.compute();
       } else {
         this._computation = parseFloat(this._value);
@@ -248,6 +255,7 @@ qx.Class.define("calc.Presenter",
       this._value = "0";
       this._waitForOperand = true; 
     },
+    
     
     /**
      * Substracts the current value from the memory
